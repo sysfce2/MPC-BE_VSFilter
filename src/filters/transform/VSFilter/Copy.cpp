@@ -342,7 +342,7 @@ void CDirectVobSubFilter::PrintMessages(BYTE* pOut)
 	int pitchIn = bm.bmWidthBytes;
 	int pitchOut = m_pOutputVFormat->GetWidthBytes(bihOut.biWidth);
 
-	if (bihOut.biHeight > 0 && bihOut.biCompression == BI_RGB) { // flip if the dst bitmap is flipped rgb (m_hbm is a top-down bitmap, not like the subpictures)
+	if (bihOut.biCompression == BI_RGB && bihOut.biHeight) { // flip if the dst bitmap is flipped rgb (m_hbm is a top-down bitmap, not like the subpictures)
 		pOut += pitchOut * (abs(bihOut.biHeight)-1);
 		pitchOut = -pitchOut;
 	}

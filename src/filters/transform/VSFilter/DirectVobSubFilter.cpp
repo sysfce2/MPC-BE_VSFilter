@@ -255,17 +255,13 @@ HRESULT CDirectVobSubFilter::CopyBuffer(BYTE* pOut, BYTE* pIn, int w, int h, int
 	BITMAPINFOHEADER bihOut;
 	ExtractBIH(&m_pOutput->CurrentMediaType(), &bihOut);
 
-	int pitchOut = 0;
+	int pitchOut = bihOut.biWidth * m_pOutputVFormat->packsize;
 
-	if (bihOut.biCompression == BI_RGB) {
-		pitchOut = bihOut.biWidth * bihOut.biBitCount >> 3;
-
-		if (bihOut.biHeight > 0) {
-			pOut += pitchOut * (h - 1);
-			pitchOut = -pitchOut;
-			if (h < 0) {
-				h = -h;
-			}
+	if (bihOut.biCompression == BI_RGB && bihOut.biHeight > 0) {
+		pOut += pitchOut * (h - 1);
+		pitchOut = -pitchOut;
+		if (h < 0) {
+			h = -h;
 		}
 	}
 
@@ -509,15 +505,15 @@ HRESULT CDirectVobSubFilter::Transform(IMediaSample* pIn)
 	BITMAPINFOHEADER bihOut;
 	ExtractBIH(&m_pOutput->CurrentMediaType(), &bihOut);
 
-	bool fInputFlipped = bihIn.biHeight >= 0 && bihIn.biCompression <= 3;
-	bool fOutputFlipped = bihOut.biHeight >= 0 && bihOut.biCompression <= 3;
+	bool fInputBottomUp = bihIn.biHeight >= 0 && bihIn.biCompression == BI_RGB;
+	bool fOutputBottomUp = bihOut.biHeight >= 0 && bihOut.biCompression == BI_RGB;
 
-	bool fFlip = fInputFlipped != fOutputFlipped;
+	bool fFlip = fInputBottomUp != fOutputBottomUp;
 	if (m_bFlipPicture) {
 		fFlip = !fFlip;
 	}
 
-	bool fFlipSub = fOutputFlipped;
+	bool fFlipSub = fOutputBottomUp;
 	if (m_bFlipSubtitles) {
 		fFlipSub = !fFlipSub;
 	}
