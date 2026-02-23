@@ -171,9 +171,6 @@ protected:
 
 	double m_fps = 25.0;
 
-	// 3.x- versions of microsoft's mpeg4 codec output flipped image
-	bool m_bMSMpeg4Fix = false;
-
 	// don't set the "hide subtitles" stream until we are finished with loading
 	bool m_bLoading = false;
 

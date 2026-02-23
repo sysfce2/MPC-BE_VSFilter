@@ -516,9 +516,6 @@ HRESULT CDirectVobSubFilter::Transform(IMediaSample* pIn)
 	if (m_bFlipPicture) {
 		fFlip = !fFlip;
 	}
-	if (m_bMSMpeg4Fix) {
-		fFlip = !fFlip;
-	}
 
 	bool fFlipSub = fOutputFlipped;
 	if (m_bFlipSubtitles) {
@@ -787,16 +784,10 @@ HRESULT CDirectVobSubFilter::CompleteConnect(PIN_DIRECTION dir, IPin* pReceivePi
 {
 	bool reconnected = false;
 	if (dir == PINDIR_INPUT) {
-		CComPtr<IBaseFilter> pFilter;
-
-		// needed when we have a decoder with a version number of 3.x
-		if (SUCCEEDED(m_pGraph->FindFilterByName(L"DivX MPEG-4 DVD Video Decompressor ", &pFilter))
-				&& FileVersion::GetVer(L"divx_c32.ax").major <= 4
-				|| SUCCEEDED(m_pGraph->FindFilterByName(L"Microcrap MPEG-4 Video Decompressor", &pFilter))
-				|| SUCCEEDED(m_pGraph->FindFilterByName(L"Microsoft MPEG-4 Video Decompressor", &pFilter))
-				&& FileVersion::GetVer(L"mpg4ds32.ax").major <= 3) {
-			m_bMSMpeg4Fix = true;
-		}
+#ifdef _DEBUG
+		auto filterName = GetFilterName(GetFilterFromPin(pReceivePin));
+		DLog(L"CDirectVobSubFilter::CompleteConnect to '%s'", filterName.GetString());
+#endif
 	} else if (dir == PINDIR_OUTPUT) {
 		const CMediaType* mtIn	= &m_pInput->CurrentMediaType();
 		const CMediaType* mtOut	= &m_pOutput->CurrentMediaType();
