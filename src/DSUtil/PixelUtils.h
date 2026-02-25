@@ -20,7 +20,7 @@
 
 #pragma once
 
-extern void CopyPlane(const UINT lines, BYTE* dst, UINT dst_pitch, const BYTE* src, UINT src_pitch);
+extern void CopyPlane(const UINT lines, BYTE* dst, UINT dst_pitch, const BYTE* src, int src_pitch);
 
 extern void CopyI420toNV12(UINT w, UINT h, BYTE* dst, UINT dst_pitch, const BYTE* const src[3], UINT src_pitch);
 extern void CopyI420toYV12(UINT h, BYTE* dst, UINT dst_pitch, const BYTE* const src[3], UINT src_pitch);

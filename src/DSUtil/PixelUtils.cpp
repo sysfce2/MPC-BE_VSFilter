@@ -25,14 +25,14 @@
 
 #include "pixconv/yuv420_nv12_unscaled.h"
 
-void CopyPlane(const UINT lines, BYTE* dst, UINT dst_pitch, const BYTE* src, UINT src_pitch)
+void CopyPlane(const UINT lines, BYTE* dst, UINT dst_pitch, const BYTE* src, int src_pitch)
 {
 	if (dst_pitch == src_pitch) {
 		memcpy(dst, src, dst_pitch * lines);
 		return;
 	}
 
-	const UINT linesize = std::min(src_pitch, dst_pitch);
+	const UINT linesize = std::min<UINT>(abs(src_pitch), dst_pitch);
 
 	for (UINT y = 0; y < lines; ++y) {
 		memcpy(dst, src, linesize);
