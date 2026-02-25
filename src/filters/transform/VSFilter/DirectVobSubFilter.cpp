@@ -509,14 +509,14 @@ HRESULT CDirectVobSubFilter::Transform(IMediaSample* pIn)
 	bool fOutputBottomUp = bihOut.biHeight >= 0 && bihOut.biCompression == BI_RGB;
 
 	bool fFlip = fInputBottomUp != fOutputBottomUp;
-	if (m_bFlipPicture) {
-		fFlip = !fFlip;
-	}
+	//if (m_bFlipPicture) {
+	//	fFlip = !fFlip;
+	//}
 
 	bool fFlipSub = fOutputBottomUp;
-	if (m_bFlipSubtitles) {
-		fFlipSub = !fFlipSub;
-	}
+	//if (m_bFlipSubtitles) {
+	//	fFlipSub = !fFlipSub;
+	//}
 
 	{
 		CAutoLock cAutoLock(&m_csQueueLock);

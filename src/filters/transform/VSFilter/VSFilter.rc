@@ -127,9 +127,9 @@ STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD | WS_SYSMENU
 FONT 8, "MS Sans Serif", 400, 0, 0x1
 BEGIN
     GROUPBOX        "Picture Output",IDC_STATIC,7,7,232,81
-    CONTROL         "Flip &picture vertically",IDC_FLIP,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,16,21,78,10
-    CONTROL         "Flip &subtitles vertically",IDC_FLIPSUB,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,109,21,84,10
-    LTEXT           "(subtitles and the picture flip independently)",IDC_STATIC,26,33,142,9
+    CONTROL         "Flip &picture vertically",IDC_FLIP,"Button",BS_AUTOCHECKBOX | NOT WS_VISIBLE | WS_TABSTOP,16,21,78,10
+    CONTROL         "Flip &subtitles vertically",IDC_FLIPSUB,"Button",BS_AUTOCHECKBOX | NOT WS_VISIBLE | WS_TABSTOP,109,21,84,10
+    LTEXT           "(subtitles and the picture flip independently)",IDC_STATIC,26,33,142,9,NOT WS_VISIBLE
     CONTROL         "&Hide subtitles",IDC_HIDE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,16,46,58,10
     CONTROL         "Show &OSD statistics",IDC_SHOWOSDSTATS,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,16,62,80,10
     LTEXT           "(don't do benchmarks on the playback while having this on ;)",IDC_STATIC,26,73,195,8
