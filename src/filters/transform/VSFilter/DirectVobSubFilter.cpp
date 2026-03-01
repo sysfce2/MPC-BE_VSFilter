@@ -439,7 +439,7 @@ HRESULT CDirectVobSubFilter::Transform(IMediaSample* pIn)
 	ExtractBIH(&mtInput, &bihIn);
 
 	CSize sub(m_wout, m_hout);
-	CSize in(bihIn.biWidth, bihIn.biHeight);
+	CSize in(bihIn.biWidth, std::abs(bihIn.biHeight));
 
 	CopyPlane(m_pTempPicBuff.get(), pDataIn, sub, in, m_black);
 
@@ -924,7 +924,7 @@ HRESULT CDirectVobSubFilter::CheckInputType(const CMediaType* mtIn)
 		 || mtIn->subtype == MEDIASUBTYPE_RGB32
 		 || mtIn->subtype == MEDIASUBTYPE_RGB24)
 		&& (mtIn->formattype == FORMAT_VideoInfo || mtIn->formattype == FORMAT_VideoInfo2)
-		&& bih.biHeight > 0
+		&& bih.biWidth > 0 && bih.biHeight != 0
 		? S_OK
 		: VFW_E_TYPE_NOT_ACCEPTED;
 }
