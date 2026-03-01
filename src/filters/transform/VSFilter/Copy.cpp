@@ -352,7 +352,7 @@ void CDirectVobSubFilter::PrintMessages(BYTE* pOut)
 	pOut += pitchOut * r.top;
 
 	if (m_fnBltLine) {
-		const int w = std::min((int)r.right, m_win);
+		const int w = std::min<int>(r.right, m_win);
 		for (int h = r.Height(); h--; pIn += pitchIn, pOut += pitchOut) {
 			m_fnBltLine(pOut, (uint32_t*)pIn, w);
 			memset_u32(pIn, 0xff000000, r.right * 4);

@@ -366,10 +366,11 @@ STDMETHODIMP CMemSubPicEx::AlphaBlt(RECT* pSrc, RECT* pDst, SubPicDesc* pTarget)
 				const BYTE* s2end = s2 + w * 4;
 				BYTE* d2 = d;
 				for (; s2 < s2end; s2 += 4, d2 += 3) {
-					if (s2[3] < 0xff) {
-						d2[0] = ((d2[0] *s2[3]) >> 8) + s2[0];
-						d2[1] = ((d2[1] *s2[3]) >> 8) + s2[1];
-						d2[2] = ((d2[2] *s2[3]) >> 8) + s2[2];
+					int a = s2[3];
+					if (a < 0xff) {
+						d2[0] = ((d2[0] * a) >> 8) + s2[0];
+						d2[1] = ((d2[1] * a) >> 8) + s2[1];
+						d2[2] = ((d2[2] * a) >> 8) + s2[2];
 					}
 				}
 			}
