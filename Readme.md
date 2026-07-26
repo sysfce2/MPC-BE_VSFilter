@@ -13,4 +13,6 @@ VSFilter's code is licensed under [GPL v3].
 
 ## Links
 
-MPC-BE - <https://github.com/Aleksoid1978/MPC-BE>
+[Sourc code](https://github.com/v0lt/VSFilter)
+
+[MPC-BE    ](https://github.com/Aleksoid1978/MPC-BE)
