@@ -1,6 +1,6 @@
 /*
  * (C) 2003-2006 Gabest
- * (C) 2006-2020 see Authors.txt
+ * (C) 2006-2026 see Authors.txt
  *
  * This file is part of MPC-BE.
  *
@@ -168,17 +168,19 @@ VFRTranslator *GetVFRTranslator(const char *vfrfile)
 {
 	char buf[32];
 	buf[19] = 0; // In "# timecode format v1" the version number is character index 19
-	FILE *f;
-	fopen_s(&f, vfrfile, "r"); // errno_t err = <-- TODO: Check if fopen_s fails
-	VFRTranslator *res = 0;
-	if (fgets(buf, 32, f) && buf[0] == '#') {
-		// So do some really shoddy parsing here, assume the file is good
-		if (buf[19] == '1') {
-			res = DNew TimecodesV1(f);
-		} else if (buf[19] == '2') {
-			res = DNew TimecodesV2(f);
+	VFRTranslator* res = nullptr;
+	FILE* f;
+	errno_t err = fopen_s(&f, vfrfile, "r");
+	if (!err) {
+		if (fgets(buf, 32, f) && buf[0] == '#') {
+			// So do some really shoddy parsing here, assume the file is good
+			if (buf[19] == '1') {
+				res = DNew TimecodesV1(f);
+			} else if (buf[19] == '2') {
+				res = DNew TimecodesV2(f);
+			}
 		}
+		fclose(f);
 	}
-	fclose(f);
 	return res;
 }
