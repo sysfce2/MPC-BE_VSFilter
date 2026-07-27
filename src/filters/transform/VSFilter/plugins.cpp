@@ -711,7 +711,7 @@ namespace Plugin
 		{
 		public:
 			CTextSubAvisynthFilter(PClip c, IScriptEnvironment* env, const char* fn, UINT codePage = CP_ACP, float fps = -1, VFRTranslator *vfr = 0) //vfr patch
-				: CTextSubFilter(CString(fn), codePage, fps)
+				: CTextSubFilter(UTF8ToWStr(fn), codePage, fps)
 				, CAvisynthFilter(c, env, vfr) {
 				if (!m_pSubPicProvider) {
 					env->ThrowError("TextSub: Can't open \"%s\"", fn);
