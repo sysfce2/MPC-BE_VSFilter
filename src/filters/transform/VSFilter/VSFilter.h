@@ -26,7 +26,7 @@ class CVSFilterApp : public CWinApp
 public:
 	CVSFilterApp();
 
-	CString m_AppName;
+	CStringW m_AppName;
 
 protected:
 	HINSTANCE LoadAppLangResourceDLL();

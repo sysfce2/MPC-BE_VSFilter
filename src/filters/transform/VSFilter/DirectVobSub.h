@@ -1,6 +1,6 @@
 /*
  * (C) 2003-2006 Gabest
- * (C) 2006-2014 see Authors.txt
+ * (C) 2006-2026 see Authors.txt
  *
  * This file is part of MPC-BE.
  *
@@ -36,7 +36,7 @@ protected:
 protected:
 	CCritSec m_propsLock;
 
-	CString m_FileName;
+	CStringW m_FileName;
 	int m_iSelectedLanguage;
 	bool m_bHideSubtitles;
 	unsigned int m_uSubPictToBuffer;

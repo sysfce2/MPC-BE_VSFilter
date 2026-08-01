@@ -48,9 +48,9 @@ BOOL CVSFilterApp::InitInstance()
 
 	DllEntryPoint(AfxGetInstanceHandle(), DLL_PROCESS_ATTACH, 0); // "DllMain" of the dshow baseclasses
 
-	STARTUPINFO si = { sizeof(si) };
-	GetStartupInfo(&si);
-	m_AppName = CString(si.lpTitle);
+	STARTUPINFOW si = { sizeof(si) };
+	GetStartupInfoW(&si);
+	m_AppName = CStringW(si.lpTitle);
 	m_AppName.Replace('\\', '/');
 	m_AppName = m_AppName.Mid(m_AppName.ReverseFind('/')+1);
 	m_AppName.MakeLower();
@@ -77,7 +77,7 @@ BOOL CVSFilterApp::WriteProfileBool(LPCTSTR lpszSection, LPCTSTR lpszEntry, bool
 
 HINSTANCE CVSFilterApp::LoadAppLangResourceDLL()
 {
-	CString fn;
+	CStringW fn;
 	fn.ReleaseBufferSetLength(::GetModuleFileNameW(m_hInstance, fn.GetBuffer(MAX_PATH), MAX_PATH));
 	fn = fn.Mid(fn.ReverseFind('\\')+1);
 	fn = fn.Left(fn.ReverseFind('.')+1);

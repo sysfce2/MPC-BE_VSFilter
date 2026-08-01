@@ -100,7 +100,7 @@ STDMETHODIMP CDirectVobSub::put_FileName(WCHAR* fn)
 		return E_POINTER;
 	}
 
-	CString tmp = fn;
+	CStringW tmp = fn;
 	if (!m_FileName.Left(m_FileName.ReverseFind('.')+1).CompareNoCase(tmp.Left(tmp.ReverseFind('.')+1))) {
 		return S_FALSE;
 	}
@@ -566,7 +566,7 @@ STDMETHODIMP CDirectVobSub::UpdateRegistry()
 	theApp.WriteProfileBool(IDS_R_VOBSUB, ResStr(IDS_RV_BUFFER), m_bBufferVobSub);
 	theApp.WriteProfileBool(IDS_R_VOBSUB, ResStr(IDS_RV_ONLYSHOWFORCEDSUBS), m_bOnlyShowForcedVobSubs);
 	theApp.WriteProfileBool(IDS_R_VOBSUB, ResStr(IDS_RV_POLYGONIZE), m_bPolygonize);
-	CString style;
+	CStringW style;
 	theApp.WriteProfileString(IDS_R_TEXT, ResStr(IDS_RT_STYLE), style <<= m_defStyle);
 	theApp.WriteProfileBool(IDS_R_GENERAL, IDS_RG_FLIPPICTURE, m_bFlipPicture);
 	theApp.WriteProfileBool(IDS_R_GENERAL, IDS_RG_FLIPSUBTITLES, m_bFlipSubtitles);

@@ -176,12 +176,12 @@ protected:
 	// don't set the "hide subtitles" stream until we are finished with loading
 	bool m_bLoading = false;
 
-	CString m_videoFileName;
+	CStringW m_videoFileName;
 
 	bool Open();
 
 	int FindPreferedLanguage(bool fHideToo = true);
-	void UpdatePreferedLanguages(CString lang);
+	void UpdatePreferedLanguages(CStringW lang);
 
 	CCritSec m_csSubLock;
 	CInterfaceList<ISubStream> m_pSubStreams;
@@ -193,14 +193,14 @@ protected:
 	// the text input pin is using these
 	void AddSubStream(ISubStream* pSubStream);
 	void RemoveSubStream(ISubStream* pSubStream);
-	void Post_EC_OLE_EVENT(CString str, DWORD_PTR nSubtitleId = -1);
+	void Post_EC_OLE_EVENT(CStringW str, DWORD_PTR nSubtitleId = -1);
 
 private:
 	class CFileReloaderData
 	{
 	public:
 		ATL::CEvent EndThreadEvent, RefreshEvent;
-		std::list<CString> files;
+		std::list<CStringW> files;
 		std::vector<CTime> mtime;
 	} m_frd;
 

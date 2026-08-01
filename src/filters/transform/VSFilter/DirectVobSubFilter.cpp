@@ -1185,14 +1185,14 @@ int CDirectVobSubFilter::FindPreferedLanguage(bool fHideToo)
 	}
 
 	for (int i = 0; i < MAXPREFLANGS; i++) {
-		CString tmp;
+		CStringW tmp;
 		tmp.Format(IDS_RL_LANG, i);
 
-		CString lang = theApp.GetProfileString(IDS_R_PREFLANGS, tmp);
+		CStringW lang = theApp.GetProfileString(IDS_R_PREFLANGS, tmp);
 
 		if (!lang.IsEmpty()) {
 			for (int ret = 0; ret < nLangs; ret++) {
-				CString l;
+				CStringW l;
 				WCHAR* pName = nullptr;
 				get_LanguageName(ret, &pName);
 				l = pName;
@@ -1208,15 +1208,15 @@ int CDirectVobSubFilter::FindPreferedLanguage(bool fHideToo)
 	return(0);
 }
 
-void CDirectVobSubFilter::UpdatePreferedLanguages(CString l)
+void CDirectVobSubFilter::UpdatePreferedLanguages(CStringW l)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-	CString langs[MAXPREFLANGS+1];
+	CStringW langs[MAXPREFLANGS+1];
 
 	int i = 0, j = 0, k = -1;
 	for (; i < MAXPREFLANGS; i++) {
-		CString tmp;
+		CStringW tmp;
 		tmp.Format(IDS_RL_LANG, i);
 
 		langs[j] = theApp.GetProfileString(IDS_R_PREFLANGS, tmp);
@@ -1239,7 +1239,7 @@ void CDirectVobSubFilter::UpdatePreferedLanguages(CString l)
 	while (k > 0) {
 		std::swap(langs[k], langs[k - 1]);
 		/*
-		CString tmp = langs[k];
+		CStringW tmp = langs[k];
 		langs[k] = langs[k-1];
 		langs[k-1] = tmp;
 		*/
@@ -1248,7 +1248,7 @@ void CDirectVobSubFilter::UpdatePreferedLanguages(CString l)
 
 	// move "Hide subtitles" to the last position if it wasn't our selection
 
-	CString hidesubs;
+	CStringW hidesubs;
 	hidesubs.LoadString(IDS_M_HIDESUBTITLES);
 
 	for (k = 1; k < j; k++) {
@@ -1260,7 +1260,7 @@ void CDirectVobSubFilter::UpdatePreferedLanguages(CString l)
 	while (k < j-1) {
 		std::swap(langs[k], langs[k + 1]);
 		/*
-		CString tmp = langs[k];
+		CStringW tmp = langs[k];
 		langs[k] = langs[k+1];
 		langs[k+1] = tmp;
 		*/
@@ -1268,7 +1268,7 @@ void CDirectVobSubFilter::UpdatePreferedLanguages(CString l)
 	}
 
 	for (i = 0; i < j; i++) {
-		CString tmp;
+		CStringW tmp;
 		tmp.Format(IDS_RL_LANG, i);
 
 		theApp.WriteProfileString(IDS_R_PREFLANGS, tmp, langs[i]);
@@ -1298,7 +1298,7 @@ STDMETHODIMP CDirectVobSubFilter::Enable(long lIndex, DWORD dwFlags)
 
 		WCHAR* pName = nullptr;
 		if (SUCCEEDED(get_LanguageName(i, &pName))) {
-			UpdatePreferedLanguages(CString(pName));
+			UpdatePreferedLanguages(CStringW(pName));
 			if (pName) {
 				CoTaskMemFree(pName);
 			}
@@ -1975,7 +1975,7 @@ bool CDirectVobSubFilter2::ShouldWeAutoload(IFilterGraph* pGraph)
 			if (!pFSF || FAILED(pFSF->GetCurFile(&fnw, nullptr)) || !fnw) {
 				continue;
 			}
-			m_videoFileName = CString(fnw);
+			m_videoFileName = CStringW(fnw);
 			CoTaskMemFree(fnw);
 			break;
 		}
@@ -2039,15 +2039,15 @@ bool CDirectVobSubFilter::Open()
 	std::vector<CStringW> paths;
 
 	for (int i = 0; i < 10; i++) {
-		CString tmp;
+		CStringW tmp;
 		tmp.Format(IDS_RP_PATH, i);
-		CString path = theApp.GetProfileString(IDS_R_DEFTEXTPATHES, tmp);
+		CStringW path = theApp.GetProfileString(IDS_R_DEFTEXTPATHES, tmp);
 		if (path.GetLength()) {
 			AddExistDirPaths(curdir, path, paths);
 		}
 	}
 
-	std::vector<CString> ret;
+	std::vector<CStringW> ret;
 	Subtitle::GetSubFileNames(m_FileName, paths, ret);
 
 	for (const auto& sub_fn : ret) {
@@ -2188,9 +2188,9 @@ void CDirectVobSubFilter::SetSubtitle(ISubStream* pSubStream, bool fApplyDefStyl
 		DXVA2_ExtendedFormat extFormat;
 		extFormat.value = GetExColorInfo(&m_pOutput->CurrentMediaType());
 
-		CString yuvMatrix = extFormat.VideoTransferMatrix == DXVA2_VideoTransferMatrix_BT601 ? L"601" : L"709";
-		CString inputRange = extFormat.NominalRange == DXVA2_NominalRange_Normal ? L"PC" : L"TV";
-		CString outpuRange(L"PC");
+		CStringW yuvMatrix = extFormat.VideoTransferMatrix == DXVA2_VideoTransferMatrix_BT601 ? L"601" : L"709";
+		CStringW inputRange = extFormat.NominalRange == DXVA2_NominalRange_Normal ? L"PC" : L"TV";
+		CStringW outpuRange(L"PC");
 
 		pSubStream->SetSourceTargetInfo(yuvMatrix, inputRange, outpuRange);
 	}
@@ -2265,7 +2265,7 @@ void CDirectVobSubFilter::RemoveSubStream(ISubStream* pSubStream)
 	}
 }
 
-void CDirectVobSubFilter::Post_EC_OLE_EVENT(CString str, DWORD_PTR nSubtitleId)
+void CDirectVobSubFilter::Post_EC_OLE_EVENT(CStringW str, DWORD_PTR nSubtitleId)
 {
 	if (nSubtitleId != -1 && nSubtitleId != m_nSubtitleId) {
 		return;
@@ -2306,7 +2306,7 @@ void CDirectVobSubFilter::SetupFRD(CStringArray& paths, std::vector<HANDLE>& han
 
 	auto it = m_frd.files.begin();
 	for (size_t i = 0; it != m_frd.files.end(); i++) {
-		CString fn = *it++;
+		CStringW fn = *it++;
 
 		CFileStatus status;
 		if (CFileGetStatus(fn, status)) {
@@ -2367,7 +2367,7 @@ DWORD CDirectVobSubFilter::ThreadProc()
 
 			auto it = m_frd.files.begin();
 			for (size_t i = 0; it != m_frd.files.end() && j == 0; i++) {
-				CString fn = *it++;
+				CStringW fn = *it++;
 
 				CFileStatus status;
 				if (CFileGetStatus(fn, status) && m_frd.mtime[i] != status.m_mtime) {
