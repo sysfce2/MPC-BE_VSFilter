@@ -1,6 +1,6 @@
 /*
  * (C) 2003-2006 Gabest
- * (C) 2006-2025 see Authors.txt
+ * (C) 2006-2026 see Authors.txt
  *
  * This file is part of MPC-BE.
  *
@@ -56,14 +56,14 @@ class CStyleEditorDialog : public CDialog
 {
 	DECLARE_DYNAMIC(CStyleEditorDialog)
 
-	CString m_title;
+	CStringW m_title;
 	CWnd* m_pParent;
 
 	void UpdateControlData(bool fSave);
 	void AskColor(int i);
 
 public:
-	CStyleEditorDialog(CString title, STSStyle* pstss, CWnd* pParent = nullptr);   // standard constructor
+	CStyleEditorDialog(CStringW title, STSStyle* pstss, CWnd* pParent = nullptr);   // standard constructor
 	virtual ~CStyleEditorDialog();
 
 	// Dialog Data

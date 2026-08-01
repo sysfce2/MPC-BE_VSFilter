@@ -55,7 +55,7 @@ STDMETHODIMP CDVSBasePPage::GetPageInfo(LPPROPPAGEINFO pPageInfo)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-	CString str;
+	CStringW str;
 	if (!str.LoadString(m_TitleId)) {
 		return E_FAIL;
 	}
@@ -356,7 +356,7 @@ bool CDVSMainPPage::OnMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 								bStyleChanged = TRUE;
 							}
 							m_defStyle = dlg.m_stss;
-							CString str = m_defStyle.fontName;
+							CStringW str = m_defStyle.fontName;
 							if (str.GetLength() > 18) {
 								str = str.Left(16).TrimRight() + L"...";
 							}
@@ -424,7 +424,7 @@ void CDVSMainPPage::UpdateObjectData(bool fSave)
 void CDVSMainPPage::UpdateControlData(bool fSave)
 {
 	if (fSave) {
-		CString fn;
+		CStringW fn;
 		m_fnedit.GetWindowTextW(fn);
 		wcscpy_s(m_fn, fn);
 
@@ -439,7 +439,7 @@ void CDVSMainPPage::UpdateControlData(bool fSave)
 			m_ePARCompensationType = CSimpleTextSubtitle::EPCTDisabled;
 		}
 	} else {
-		m_fnedit.SetWindowTextW(CString(m_fn));
+		m_fnedit.SetWindowTextW(CStringW(m_fn));
 		m_oplacement.SetCheck(m_bOverridePlacement);
 		m_subposx.SetRange(-20, 120);
 		m_subposx.SetPos(m_PlacementXperc);
@@ -452,7 +452,7 @@ void CDVSMainPPage::UpdateControlData(bool fSave)
 		m_langs.ResetContent();
 		m_langs.EnableWindow(m_nLangs > 0);
 		for (int i = 0; i < m_nLangs; i++) {
-			m_langs.AddString(CString(m_ppLangs[i]));
+			m_langs.AddString(CStringW(m_ppLangs[i]));
 		}
 		m_langs.SetCurSel(m_iSelectedLanguage);
 
@@ -730,7 +730,7 @@ void CDVSTimingPPage::UpdateControlData(bool fSave)
 {
 	if (fSave) {
 		m_bMediaFPSEnabled = !!m_modfps.GetCheck();
-		CString fpsstr;
+		CStringW fpsstr;
 		m_fps.GetWindowTextW(fpsstr);
 		float fps;
 		if (swscanf_s(fpsstr, L"%f", &fps) == 1) {
@@ -741,7 +741,7 @@ void CDVSTimingPPage::UpdateControlData(bool fSave)
 		m_SubtitleSpeedDiv = m_subspeeddiv.GetPos32();
 	} else {
 		m_modfps.SetCheck(m_bMediaFPSEnabled);
-		CString fpsstr;
+		CStringW fpsstr;
 		fpsstr.Format(L"%.4f", m_MediaFPS);
 		m_fps.SetWindowTextW(fpsstr);
 		m_fps.EnableWindow(m_bMediaFPSEnabled);
@@ -905,7 +905,7 @@ bool CDVSColorPPage::OnMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 						case IDC_COLORUP: {
 							int sel = m_preflist.GetCurSel();
 							if (sel > 0) {
-								CString str;
+								CStringW str;
 								m_preflist.GetText(sel, str);
 								int iPos = (int)m_preflist.GetItemData(sel);
 								m_preflist.DeleteString(sel);
@@ -920,7 +920,7 @@ bool CDVSColorPPage::OnMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 						case IDC_COLORDOWN: {
 							int sel = m_preflist.GetCurSel();
 							if (sel >= 0 && sel < m_preflist.GetCount()-1) {
-								CString str;
+								CStringW str;
 								m_preflist.GetText(sel, str);
 								int iPos = (int)m_preflist.GetItemData(sel);
 								m_preflist.DeleteString(sel);
@@ -1033,7 +1033,7 @@ bool CDVSPathsPPage::OnMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 						int i = m_pathlist.GetCurSel();
 						m_remove.EnableWindow(i >= 3 ? TRUE : FALSE);
 						if (i >= 0) {
-							CString path;
+							CStringW path;
 							m_pathlist.GetText(i, path);
 							m_path.SetWindowTextW(path);
 						}
@@ -1113,10 +1113,10 @@ bool CDVSPathsPPage::OnMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 void CDVSPathsPPage::UpdateObjectData(bool fSave)
 {
 	constexpr LPCWSTR chk = L"<:?*>";
+	CStringW path, tmp;
+	int i = 0;
 
 	if (fSave) {
-		CString path, tmp;
-		int i = 0;
 		do {
 			tmp.Format(IDS_RP_PATH, i++);
 			path = theApp.GetProfileString(IDS_R_DEFTEXTPATHES, tmp, chk);
@@ -1130,8 +1130,6 @@ void CDVSPathsPPage::UpdateObjectData(bool fSave)
 			theApp.WriteProfileString(IDS_R_DEFTEXTPATHES, tmp, m_paths[i]);
 		}
 	} else {
-		CString path, tmp;
-		int i = 0;
 		do {
 			if (!path.IsEmpty()) {
 				m_paths.Add(path);
@@ -1147,7 +1145,7 @@ void CDVSPathsPPage::UpdateControlData(bool fSave)
 	if (fSave) {
 		m_paths.RemoveAll();
 		for (int i = 0; i < m_pathlist.GetCount(); i++) {
-			CString path;
+			CStringW path;
 			m_pathlist.GetText(i, path);
 			m_paths.Add(path);
 		}

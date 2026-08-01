@@ -1,6 +1,6 @@
 /*
  * (C) 2003-2006 Gabest
- * (C) 2006-2025 see Authors.txt
+ * (C) 2006-2026 see Authors.txt
  *
  * This file is part of MPC-BE.
  *
@@ -35,7 +35,7 @@ END_MESSAGE_MAP()
 // CStyleEditorDialog dialog
 
 IMPLEMENT_DYNAMIC(CStyleEditorDialog, CDialog)
-CStyleEditorDialog::CStyleEditorDialog(CString title, STSStyle* pstss, CWnd* pParent /*=nullptr*/)
+CStyleEditorDialog::CStyleEditorDialog(CStringW title, STSStyle* pstss, CWnd* pParent /*=nullptr*/)
 	: CDialog(CStyleEditorDialog::IDD, pParent)
 	, m_title(title)
 	, m_stss(*pstss)
@@ -206,7 +206,7 @@ void CStyleEditorDialog::OnBnClickedButton1()
 
 	CFontDialog dlg(&lf, CF_SCREENFONTS | CF_INITTOLOGFONTSTRUCT | CF_FORCEFONTEXIST | CF_SCALABLEONLY | CF_EFFECTS, nullptr, this);
 	if (dlg.DoModal() == IDOK) {
-		CString str(lf.lfFaceName);
+		CStringW str(lf.lfFaceName);
 		if (str.GetLength() > 16) {
 			str = str.Left(14) + L"...";
 		}
