@@ -1,6 +1,6 @@
 /*
  * (C) 2003-2006 Gabest
- * (C) 2006-2018 see Authors.txt
+ * (C) 2006-2026 see Authors.txt
  *
  * This file is part of MPC-BE.
  *
@@ -44,19 +44,19 @@ LRESULT CALLBACK HookProc(UINT code, WPARAM wParam, LPARAM lParam)
 	if (msg->message == WM_KEYDOWN) {
 		switch (msg->wParam) {
 			case VK_F13:
-				PostMessage(HWND_BROADCAST, WM_DVSPREVSUB, 0, 0);
+				PostMessageW(HWND_BROADCAST, WM_DVSPREVSUB, 0, 0);
 				break;
 			case VK_F14:
-				PostMessage(HWND_BROADCAST, WM_DVSNEXTSUB, 0, 0);
+				PostMessageW(HWND_BROADCAST, WM_DVSNEXTSUB, 0, 0);
 				break;
 			case VK_F15:
-				PostMessage(HWND_BROADCAST, WM_DVSHIDESUB, 0, 0);
+				PostMessageW(HWND_BROADCAST, WM_DVSHIDESUB, 0, 0);
 				break;
 			case VK_F16:
-				PostMessage(HWND_BROADCAST, WM_DVSSHOWSUB, 0, 0);
+				PostMessageW(HWND_BROADCAST, WM_DVSSHOWSUB, 0, 0);
 				break;
 			case VK_F17:
-				PostMessage(HWND_BROADCAST, WM_DVSSHOWHIDESUB, 0, 0);
+				PostMessageW(HWND_BROADCAST, WM_DVSSHOWHIDESUB, 0, 0);
 				break;
 			default:
 				break;
@@ -92,7 +92,7 @@ int CSystrayWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		//		g_hHook = SetWindowsHookEx(WH_GETMESSAGE, (HOOKPROC)HookProc, AfxGetInstanceHandle(), 0);
 	}
 
-	PostMessage(s_uTaskbarRestart);
+	PostMessageW(s_uTaskbarRestart);
 
 	return 0;
 }
@@ -226,7 +226,7 @@ LRESULT CSystrayWindow::OnNotifyIcon(WPARAM wParam, LPARAM lParam)
 			CStringArray names;
 
 			BeginEnumFilters(m_tbid->graph, pEF, pBF) {
-				CString name = GetFilterName(pBF);
+				CStringW name = GetFilterName(pBF);
 				if (name.IsEmpty()) {
 					continue;
 				}
@@ -257,7 +257,7 @@ LRESULT CSystrayWindow::OnNotifyIcon(WPARAM wParam, LPARAM lParam)
 						prevgroup = group;
 
 						if (pName) {
-							popup.AppendMenu(MF_ENABLED|MF_STRING|(flags?MF_CHECKED:MF_UNCHECKED), (1<<15)|(j<<8)|(i), CString(pName));
+							popup.AppendMenu(MF_ENABLED|MF_STRING|(flags?MF_CHECKED:MF_UNCHECKED), (1<<15)|(j<<8)|(i), pName);
 							CoTaskMemFree(pName);
 						}
 					}
@@ -285,7 +285,7 @@ LRESULT CSystrayWindow::OnNotifyIcon(WPARAM wParam, LPARAM lParam)
 
 			SetForegroundWindow();
 			UINT id = popup.TrackPopupMenu(TPM_LEFTBUTTON|TPM_RETURNCMD, p.x, p.y, CWnd::FromHandle(hWnd), 0);
-			PostMessage(WM_NULL);
+			PostMessageW(WM_NULL);
 
 			if (id & (1<<15)) {
 				pStreams[(id>>8)&0x3f]->Enable(id&0xff, AMSTREAMSELECTENABLE_ENABLE);
@@ -324,9 +324,9 @@ DWORD CALLBACK SystrayThreadProc(void* pParam)
 	((SystrayIconData*)pParam)->hSystrayWnd = wnd.m_hWnd;
 
 	MSG msg;
-	while (GetMessage(&msg, nullptr/*wnd.m_hWnd*/, 0, 0)) {
+	while (GetMessageW(&msg, nullptr/*wnd.m_hWnd*/, 0, 0)) {
 		TranslateMessage(&msg);
-		DispatchMessage(&msg);
+		DispatchMessageW(&msg);
 	}
 
 	return 0;
@@ -371,7 +371,7 @@ static WCHAR* CallPPage(IFilterGraph* pGraph, int idx, HWND hWnd)
 		} else {
 			ret = DNew WCHAR[wcslen(wstr)+1];
 			if (ret) {
-				wcscpy_s(ret, wcslen(wstr) + 1, CString(wstr));
+				wcscpy_s(ret, wcslen(wstr) + 1, wstr);
 			}
 		}
 	}

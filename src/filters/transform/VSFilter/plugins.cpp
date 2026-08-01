@@ -66,7 +66,7 @@ namespace Plugin
 	class CFilter : public CAMThread, public CCritSec
 	{
 	private:
-		CString m_fn;
+		CStringW m_fn;
 
 	protected:
 		float m_fps = -1;
@@ -84,11 +84,11 @@ namespace Plugin
 			CAMThread::CallWorker(0);
 		}
 
-		CString GetFileName() {
+		CStringW GetFileName() {
 			CAutoLock cAutoLock(this);
 			return m_fn;
 		}
-		void SetFileName(CString fn) {
+		void SetFileName(CStringW fn) {
 			CAutoLock cAutoLock(this);
 			m_fn = fn;
 		}
@@ -140,7 +140,7 @@ namespace Plugin
 			std::vector<HANDLE> handles;
 			handles.push_back(GetRequestHandle());
 
-			CString fn = GetFileName();
+			CStringW fn = GetFileName();
 			CFileStatus fs;
 			fs.m_mtime = 0;
 			CFileGetStatus(fn, fs);
@@ -167,7 +167,7 @@ namespace Plugin
 						}
 					}
 				} else if (WAIT_TIMEOUT == i) {
-					CString fn2 = GetFileName();
+					CStringW fn2 = GetFileName();
 
 					if (fn != fn2) {
 						CPath p(fn2);
@@ -197,19 +197,19 @@ namespace Plugin
 	class CVobSubFilter : virtual public CFilter
 	{
 	public:
-		CVobSubFilter(CString fn = L"") {
+		CVobSubFilter(CStringW fn = L"") {
 			if (!fn.IsEmpty()) {
 				Open(fn);
 			}
 		}
 
-		bool Open(CString fn) {
+		bool Open(CStringW fn) {
 			SetFileName(L"");
 			m_pSubPicProvider.Release();
 
 			if (CVobSubFile* vsf = DNew CVobSubFile(&m_csSubLock)) {
 				m_pSubPicProvider = (ISubPicProvider*)vsf;
-				if (vsf->Open(CString(fn))) {
+				if (vsf->Open(CStringW(fn))) {
 					SetFileName(fn);
 				} else {
 					m_pSubPicProvider.Release();
@@ -225,7 +225,7 @@ namespace Plugin
 		UINT m_DefaultCodePage;
 
 	public:
-		CTextSubFilter(CString fn = L"", UINT codePage = CP_ACP, float fps = -1)
+		CTextSubFilter(CStringW fn = L"", UINT codePage = CP_ACP, float fps = -1)
 			: m_DefaultCodePage(ExpandCodePage(codePage))
 		{
 			m_fps = fps;
@@ -238,7 +238,7 @@ namespace Plugin
 			return(m_DefaultCodePage);
 		}
 
-		bool Open(CString fn, UINT codePage = CP_ACP) {
+		bool Open(CStringW fn, UINT codePage = CP_ACP) {
 			SetFileName(L"");
 			m_DefaultCodePage = ExpandCodePage(codePage);
 			m_pSubPicProvider.Release();
@@ -246,7 +246,7 @@ namespace Plugin
 			if (!m_pSubPicProvider) {
 				if (CRenderedTextSubtitle* rts = DNew CRenderedTextSubtitle(&m_csSubLock)) {
 					m_pSubPicProvider = (ISubPicProvider*)rts;
-					if (rts->Open(CString(fn), m_DefaultCodePage, false, "", "")) {
+					if (rts->Open(CStringW(fn), m_DefaultCodePage, false, "", "")) {
 						SetFileName(fn);
 					} else {
 						m_pSubPicProvider.Release();
@@ -303,7 +303,7 @@ namespace Plugin
 		class CVobSubVirtualDubFilter : public CVobSubFilter, public CVirtualDubFilter
 		{
 		public:
-			CVobSubVirtualDubFilter(CString fn = L"")
+			CVobSubVirtualDubFilter(CStringW fn = L"")
 				: CVobSubFilter(fn) {}
 
 			int ConfigProc(VDXFilterActivation* fa, const VDXFilterFunctions* ff, VDXHWND hwnd) {
@@ -339,7 +339,7 @@ namespace Plugin
 		class CTextSubVirtualDubFilter : public CTextSubFilter, public CVirtualDubFilter
 		{
 		public:
-			CTextSubVirtualDubFilter(CString fn = L"", UINT codePage = CP_ACP)
+			CTextSubVirtualDubFilter(CStringW fn = L"", UINT codePage = CP_ACP)
 				: CTextSubFilter(fn, codePage) {}
 
 			int ConfigProc(VDXFilterActivation* fa, const VDXFilterFunctions* ff, VDXHWND hwnd) {
