@@ -14,6 +14,7 @@ Fixed registration of a filter from a folder with Unicode characters.
 For VirtualDub and AviSynth plugins, the DefaultCodePage parameter is now used instead of the CharSet parameter.
 Fixed support for Unicode paths for the AviSynth plugin.
 Fixed display of VirtualDub plugin settings.
+Fixed upside-down subtitles when using MaskSub in AviSynth script.
 Removed support for Avisynth v1.0.
 Fixed saving subtitle search paths in the settings dialog.
 Added the ability to use the '*' symbol for the last folder in the subtitle search path.
